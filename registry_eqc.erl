@@ -48,6 +48,17 @@ register_pre(S,[Name,Pid]) ->
 register_next(S,_,[Name,Pid]) ->
   S#state{regs=S#state.regs++[{Name,Pid}]}.
 
+%% whereis
+
+whereis(Name) ->
+  erlang:whereis(Name).
+
+whereis_args(_) ->
+  [name()].
+
+whereis_post(S,[Name],Result) ->
+  eq(Result,proplists:get_value(Name,S#state.regs)).
+
 %% property
 
 prop_registry() ->
