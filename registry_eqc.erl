@@ -38,6 +38,9 @@ register(Name,Pid) ->
 register_args(S) ->
   [name(),elements(S#state.pids)].
 
+register_pre(S) ->
+  S#state.pids /= [].
+
 %% property
 
 prop_registry() ->
