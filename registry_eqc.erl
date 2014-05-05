@@ -13,7 +13,7 @@ name() ->
 
 %% state
 
--record(state,{pids=[],regs=[]}).
+-record(state,{pids=[],regs=[],dead=[]}).
 
 initial_state() ->
   #state{}.
@@ -44,7 +44,8 @@ register_pre(S) ->
 
 register_pre(S,[Name,Pid]) ->
   not lists:keymember(Name,1,S#state.regs) 
-    andalso not lists:keymember(Pid,2,S#state.regs).
+    andalso not lists:keymember(Pid,2,S#state.regs)
+    andalso not lists:member(Pid,S#state.dead).
 
 register_next(S,_,[Name,Pid]) ->
   S#state{regs=S#state.regs++[{Name,Pid}]}.
@@ -85,6 +86,9 @@ kill_args(S) ->
 
 kill_pre(S) ->
   S#state.pids /= [].
+
+kill_next(S,_,[Pid]) ->
+  S#state{dead=S#state.dead++[Pid]}.
 
 %% property
 
