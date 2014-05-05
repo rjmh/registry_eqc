@@ -3,6 +3,13 @@
 -include_lib("eqc/include/eqc_statem.hrl").
 -compile(export_all).
 
+%% state
+
+-record(state,{}).
+
+initial_state() ->
+  #state{}.
+
 %% property
 
 prop_registry() ->
