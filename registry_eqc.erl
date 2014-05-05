@@ -74,6 +74,7 @@ unregister_pre(S,[Name]) ->
 %% property
 
 prop_registry() ->
+  eqc_statem:show_states(
   ?FORALL(Cmds, commands(?MODULE),
           begin
             [catch unregister(N) || N <- ?names],
@@ -82,4 +83,4 @@ prop_registry() ->
                             aggregate(command_names(Cmds),
                                       ?IMPLIES(Res/=precondition_failed,
                                                Res == ok)))
-          end).
+          end)).
