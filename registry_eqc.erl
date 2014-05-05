@@ -34,7 +34,7 @@ spawn_next(S,Pid,[]) ->
 %% register
 
 register(Name,Pid) ->
-  erlang:register(Name,Pid).
+  catch erlang:register(Name,Pid).
 
 register_args(S) ->
   [name(),elements(S#state.pids)].
@@ -42,13 +42,16 @@ register_args(S) ->
 register_pre(S) ->
   S#state.pids /= [].
 
-register_pre(S,[Name,Pid]) ->
+register_ok(S,[Name,Pid]) ->
   not lists:keymember(Name,1,S#state.regs) 
     andalso not lists:keymember(Pid,2,S#state.regs)
     andalso not lists:member(Pid,S#state.dead).
 
 register_next(S,_,[Name,Pid]) ->
   S#state{regs=S#state.regs++[{Name,Pid}]}.
+
+register_post(S,[Name,Pid],Result) ->
+  (Result==true) == register_ok(S,[Name,Pid]).
 
 %% whereis
 
