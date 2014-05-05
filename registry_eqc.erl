@@ -3,6 +3,13 @@
 -include_lib("eqc/include/eqc_statem.hrl").
 -compile(export_all).
 
+%% generators
+
+-define(names,[a,b,c,d,e]).
+
+name() ->
+  elements(?names).
+
 %% state
 
 -record(state,{pids=[]}).
@@ -22,6 +29,14 @@ spawn_args(_) ->
 
 spawn_next(S,Pid,[]) ->
   S#state{pids=S#state.pids++[Pid]}.
+
+%% register
+
+register(Name,Pid) ->
+  erlang:register(Name,Pid).
+
+register_args(S) ->
+  [name(),elements(S#state.pids)].
 
 %% property
 
