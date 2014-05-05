@@ -5,10 +5,23 @@
 
 %% state
 
--record(state,{}).
+-record(state,{pids=[]}).
 
 initial_state() ->
   #state{}.
+
+%% spawn
+
+spawn() ->
+  erlang:spawn(fun() ->
+                   timer:sleep(5000)
+               end).
+
+spawn_args(_) ->
+  [].
+
+spawn_next(S,Pid,[]) ->
+  S#state{pids=S#state.pids++[Pid]}.
 
 %% property
 
