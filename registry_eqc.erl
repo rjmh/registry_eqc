@@ -68,6 +68,9 @@ unregister(Name) ->
 unregister_args(_) ->
   [name()].
 
+unregister_pre(S,[Name]) ->
+  lists:keymember(Name,1,S#state.regs).
+
 %% property
 
 prop_registry() ->
