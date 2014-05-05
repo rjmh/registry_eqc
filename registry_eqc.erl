@@ -88,7 +88,8 @@ kill_pre(S) ->
   S#state.pids /= [].
 
 kill_next(S,_,[Pid]) ->
-  S#state{dead=S#state.dead++[Pid]}.
+  S#state{dead=S#state.dead++[Pid],
+          regs=lists:keydelete(Pid,2,S#state.regs)}.
 
 %% property
 
