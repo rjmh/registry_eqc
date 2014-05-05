@@ -72,16 +72,19 @@ whereis_post(S,[Name],Result) ->
 %% unregister
 
 unregister(Name) ->
-  erlang:unregister(Name).
+  catch erlang:unregister(Name).
 
 unregister_args(_) ->
   [name()].
 
-unregister_pre(S,[Name]) ->
+unregister_ok(S,[Name]) ->
   lists:keymember(Name,1,S#state.regs).
 
 unregister_next(S,_,[Name]) ->
   S#state{regs=lists:keydelete(Name,1,S#state.regs)}.
+
+unregister_post(S,[Name],Res) ->
+  (Res==true) == unregister_ok(S,[Name]).
 
 %% kill
 
