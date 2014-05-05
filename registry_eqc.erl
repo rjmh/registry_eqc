@@ -74,6 +74,18 @@ unregister_pre(S,[Name]) ->
 unregister_next(S,_,[Name]) ->
   S#state{regs=lists:keydelete(Name,1,S#state.regs)}.
 
+%% kill
+
+kill(Pid) ->
+  exit(Pid,kill),
+  timer:sleep(1).
+
+kill_args(S) ->
+  [elements(S#state.pids)].
+
+kill_pre(S) ->
+  S#state.pids /= [].
+
 %% property
 
 prop_registry() ->
