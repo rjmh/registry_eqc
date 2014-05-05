@@ -2,6 +2,7 @@
 -include_lib("eqc/include/eqc.hrl").
 -include_lib("eqc/include/eqc_statem.hrl").
 -compile(export_all).
+-compile({no_auto_import,[unregister/1]}).
 
 %% generators
 
@@ -58,6 +59,14 @@ whereis_args(_) ->
 
 whereis_post(S,[Name],Result) ->
   eq(Result,proplists:get_value(Name,S#state.regs)).
+
+%% unregister
+
+unregister(Name) ->
+  erlang:unregister(Name).
+
+unregister_args(_) ->
+  [name()].
 
 %% property
 
