@@ -12,7 +12,7 @@ name() ->
 
 %% state
 
--record(state,{pids=[]}).
+-record(state,{pids=[],regs=[]}).
 
 initial_state() ->
   #state{}.
@@ -40,6 +40,12 @@ register_args(S) ->
 
 register_pre(S) ->
   S#state.pids /= [].
+
+register_pre(S,[Name,Pid]) ->
+  not lists:keymember(Name,1,S#state.regs).
+
+register_next(S,_,[Name,Pid]) ->
+  S#state{regs=S#state.regs++[{Name,Pid}]}.
 
 %% property
 
