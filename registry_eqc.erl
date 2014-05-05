@@ -48,7 +48,12 @@ register_ok(S,[Name,Pid]) ->
     andalso not lists:member(Pid,S#state.dead).
 
 register_next(S,_,[Name,Pid]) ->
-  S#state{regs=S#state.regs++[{Name,Pid}]}.
+  case register_ok(S,[Name,Pid]) of
+    true ->
+      S#state{regs=S#state.regs++[{Name,Pid}]};
+    false ->
+      S
+  end.
 
 register_post(S,[Name,Pid],Result) ->
   (Result==true) == register_ok(S,[Name,Pid]).
