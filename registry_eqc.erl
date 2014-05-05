@@ -57,5 +57,6 @@ prop_registry() ->
             {H, S, Res} = run_commands(?MODULE,Cmds),
             pretty_commands(?MODULE, Cmds, {H, S, Res},
                             aggregate(command_names(Cmds),
-                                      Res == ok))
+                                      ?IMPLIES(Res/=precondition_failed,
+                                               Res == ok)))
           end).
