@@ -1,7 +1,7 @@
-This file is an agreement between Quviq AB ("Quviq"), of
-Bergshamravägen 4, 43360 SÄVEDALEN, Sweden, and the owner of the
-github repository in which the file appears ("the owner"). By placing
-this file in a github repository, the owner agrees to the terms below.
+This file is an agreement between Quviq AB ("Quviq"), Sven Hultins
+Gata 9, Gothenburg, Sweden, and the committers to the github
+repository in which the file appears ("the owner"). By placing this
+file in a github repository, the owner agrees to the terms below.
 
 The purpose of the agreement is to enable Quviq AB to provide a
 continuous integration service to the owner, whereby the code in the
@@ -15,7 +15,7 @@ The owner agrees that Quviq may run the tests in the source code and
 display the test results on the web, without obligation.
 
 The owner warrants that running the tests in the source code and
-displaying the test results on the web violates no laws or other
+displaying the test results on the web violates no laws, licences or other
 agreements. In the event of such a violation, the owner accepts full
 responsibility.
 
