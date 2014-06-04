@@ -35,7 +35,7 @@ spawn_next(S,Pid,[]) ->
 %% register
 
 register(Name,Pid) ->
-  catch erlang:register(Name,Pid).
+  erlang:register(Name,Pid).
 
 register_args(S) ->
   [name(),elements(S#state.pids)].
