@@ -3,6 +3,7 @@
 -include_lib("eqc/include/eqc_statem.hrl").
 -compile(export_all).
 -compile({no_auto_import,[unregister/1]}).
+-compile({parse_transform,eqc_cover}).
 
 %% generators
 
