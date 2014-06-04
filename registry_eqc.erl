@@ -106,6 +106,7 @@ kill_next(S,_,[Pid]) ->
 %% property
 
 prop_registry() ->
+  eqc:numtests(1000,
   eqc_statem:show_states(
   ?FORALL(Cmds, commands(?MODULE),
           begin
@@ -115,4 +116,4 @@ prop_registry() ->
                             aggregate(command_names(Cmds),
                                       ?IMPLIES(Res/=precondition_failed,
                                                Res == ok)))
-          end)).
+          end))).
