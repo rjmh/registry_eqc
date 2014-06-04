@@ -1,3 +1,3 @@
-{build, "erlc *.erl +\"{parse_transform,eqc_cover}\""}.
+{build, "erl -eval \"make:all([{parse_transform,eqc_cover}])\" -s erlang halt"}.
 {test_path, "."}.
 {cover_tool, eqc_cover}.
