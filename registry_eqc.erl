@@ -5,6 +5,13 @@
 -compile(export_all).
 -compile({no_auto_import,[unregister/1]}).
 
+prop_version() ->
+  numtests(1,
+           begin
+             io:format("Version ~p\n",[erlang:system_info(otp_release)]),
+             true
+           end).
+
 %% generators
 
 -define(names,[a,b,c,d,e]).
