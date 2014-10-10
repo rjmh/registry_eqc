@@ -53,7 +53,7 @@ register_pre(S) ->
 register_ok(S,[Name,Pid]) ->
   not lists:keymember(Name,1,S#state.regs) 
     andalso not lists:keymember(Pid,2,S#state.regs)
-    .%andalso not lists:member(Pid,S#state.dead).
+    andalso not lists:member(Pid,S#state.dead).
 
 register_next(S,_,[Name,Pid]) ->
   case register_ok(S,[Name,Pid]) of
