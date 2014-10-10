@@ -42,7 +42,7 @@ spawn_next(S,Pid,[]) ->
 %% register
 
 register(Name,Pid) ->
-  erlang:register(Name,Pid).
+  catch erlang:register(Name,Pid).
 
 register_args(S) ->
   [name(),elements(S#state.pids)].
@@ -53,7 +53,7 @@ register_pre(S) ->
 register_ok(S,[Name,Pid]) ->
   not lists:keymember(Name,1,S#state.regs) 
     andalso not lists:keymember(Pid,2,S#state.regs)
-    andalso not lists:member(Pid,S#state.dead).
+    .%andalso not lists:member(Pid,S#state.dead).
 
 register_next(S,_,[Name,Pid]) ->
   case register_ok(S,[Name,Pid]) of
