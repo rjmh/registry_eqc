@@ -147,9 +147,9 @@ prop_registry() ->
             pretty_commands(?MODULE, Cmds, {H, S, Res},
               aggregate(call_features(H),
                 aggregate(call_features(register,H),
-                aggregate(call_features(unregister,H),
-                aggregate(call_features(whereis,H),
-                  measure(registered,length(S#state.regs),
-                    ?IMPLIES(Res/=precondition_failed,
-                             Res == ok)))))))
+                  aggregate(call_features(unregister,H),
+                    aggregate(call_features(whereis,H),
+                      measure(registered,length(S#state.regs),
+                        ?IMPLIES(Res/=precondition_failed,
+                                 Res == ok)))))))
           end))).
