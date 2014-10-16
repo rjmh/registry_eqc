@@ -127,29 +127,14 @@ kill_next(S,_,[Pid]) ->
   S#state{dead=S#state.dead++[Pid],
           regs=lists:keydelete(Pid,2,S#state.regs)}.
 
-%% weight
-
-weight(_,spawn)      -> 50;
-weight(_,register)   -> 20;
-weight(_,unregister) -> 1;
-weight(_,kill)       -> 5;
-weight(_,_)          -> 10.
-
 %% property
 
 prop_registry() ->
-  eqc:numtests(1000,
-  eqc_statem:show_states(
-  ?FORALL(Cmds, more_commands(3,commands(?MODULE)),
+  ?FORALL(Cmds, commands(?MODULE),
           begin
             [catch unregister(N) || N <- ?names],
             {H, S, Res} = run_commands(?MODULE,Cmds),
             pretty_commands(?MODULE, Cmds, {H, S, Res},
-              aggregate(call_features(H),
-                aggregate(call_features(register,H),
-                  aggregate(call_features(unregister,H),
-                    aggregate(call_features(whereis,H),
-                      measure(registered,length(S#state.regs),
-                        ?IMPLIES(Res/=precondition_failed,
-                                 Res == ok)))))))
-          end))).
+              aggregate(command_names(Cmds),
+                        Res == ok))
+          end).
