@@ -66,6 +66,12 @@ register_next(S,_,[Name,Pid]) ->
 register_post(S,[Name,Pid],Result) ->
   (Result==true) == register_ok(S,[Name,Pid]).
 
+register_features(S,[Name,Pid],Result) ->
+  [success || Result==true] ++
+    [name_already_registered || lists:keymember(Name,1,S#state.regs)] ++
+    [pid_already_registered || lists:keymember(Pid,2,S#state.regs)] ++
+    [pid_is_dead || lists:member(Pid,S#state.dead)].
+
 %% whereis
 
 whereis(Name) ->
@@ -76,6 +82,9 @@ whereis_args(_) ->
 
 whereis_post(S,[Name],Result) ->
   eq(Result,proplists:get_value(Name,S#state.regs)).
+
+whereis_features(_,_,Result) ->
+  [Result /= undefined].
 
 %% unregister
 
@@ -94,6 +103,14 @@ unregister_next(S,_,[Name]) ->
 unregister_post(S,[Name],Res) ->
   (Res==true) == unregister_ok(S,[Name]).
 
+unregister_features(_,_,Result) ->
+  case Result of
+    true ->
+      [success];
+    {'EXIT',_} ->
+      [failure]
+  end.
+
 %% kill
 
 kill(Pid) ->
@@ -110,17 +127,29 @@ kill_next(S,_,[Pid]) ->
   S#state{dead=S#state.dead++[Pid],
           regs=lists:keydelete(Pid,2,S#state.regs)}.
 
+%% weight
+
+weight(_,spawn)      -> 50;
+weight(_,register)   -> 20;
+weight(_,unregister) -> 1;
+weight(_,kill)       -> 5;
+weight(_,_)          -> 10.
+
 %% property
 
 prop_registry() ->
   eqc:numtests(1000,
   eqc_statem:show_states(
-  ?FORALL(Cmds, commands(?MODULE),
+  ?FORALL(Cmds, more_commands(3,commands(?MODULE)),
           begin
             [catch unregister(N) || N <- ?names],
             {H, S, Res} = run_commands(?MODULE,Cmds),
             pretty_commands(?MODULE, Cmds, {H, S, Res},
-                            aggregate(command_names(Cmds),
-                                      ?IMPLIES(Res/=precondition_failed,
-                                               Res == ok)))
+              aggregate(call_features(H),
+                aggregate(call_features(register,H),
+                aggregate(call_features(unregister,H),
+                aggregate(call_features(whereis,H),
+                  measure(registered,length(S#state.regs),
+                    ?IMPLIES(Res/=precondition_failed,
+                             Res == ok)))))))
           end))).
